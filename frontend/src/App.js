@@ -8,6 +8,7 @@ function App() {
   const [dataPrevista, setDataPrevista] = useState('');
   const [disciplina, setDisciplina] = useState('');
   const [conteudos, setConteudos] = useState('');
+  const [topicos, setTopicos] = useState(''); // <-- DADO SEPARADO: Guardado internamente
   const [recursos, setRecursos] = useState('');
   const [tags, setTags] = useState('');
 
@@ -65,13 +66,55 @@ function App() {
       if (!response.ok) throw new Error("Falha na API");
       const data = await response.json();
       
-      setConteudos(data.conteudos || '');
-      
-      if (data.tags && Array.isArray(data.tags)) {
-        setTags(data.tags.slice(0, 3).join(', '));
-      } else if (data.tags) {
-        setTags(data.tags);
+      // 1. Se a API já manda separado, ótimo. Se mandar junto, o parser separa.
+      let textoConteudos = data.conteudos || '';
+      let listaTags = data.tags || '';
+      let textoTopicos = data.topicos || data.topicos_relacionados || '';
+
+      if (textoConteudos && !listaTags && !textoTopicos) {
+        const linhas = textoConteudos.split('\n');
+        let blocoConteudos = [];
+        let blocoTopicos = [];
+        let blocoTags = [];
+        let secaoAtual = 'conteudos';
+
+        linhas.forEach(linha => {
+          const linhaLimpa = linha.toLowerCase().trim();
+          if (linhaLimpa.includes('tópico') || linhaLimpa.includes('topico')) {
+            secaoAtual = 'topicos';
+            return;
+          }
+          if (linhaLimpa.includes('tag')) {
+            secaoAtual = 'tags';
+            return;
+          }
+
+          if (secaoAtual === 'conteudos') blocoConteudos.push(linha);
+          else if (secaoAtual === 'topicos') blocoTopicos.push(linha);
+          else if (secaoAtual === 'tags') blocoTags.push(linha);
+        });
+
+        if (blocoTopicos.length > 0 || blocoTags.length > 0) {
+          textoConteudos = blocoConteudos.join('\n').trim();
+          textoTopicos = blocoTopicos.join('\n').trim();
+          listaTags = blocoTags.join(', ').replace(/tags?:?/gi, '').replace(/#/g, '');
+        }
       }
+
+      // 2. Alimenta os estados de forma 100% INDEPENDENTE
+      setConteudos(textoConteudos);
+      setTopicos(textoTopicos); // Guardado isolado no estado, sem ir para a tela
+      
+      // Tratamento estrito das 3 tags
+      if (Array.isArray(listaTags)) {
+        setTags(listaTags.slice(0, 3).join(', '));
+      } else if (typeof listaTags === 'string' && listaTags.trim().length > 0) {
+        const tagsTratadas = listaTags.replace(/#/g, '').split(',').map(t => t.trim()).slice(0, 3).join(', ');
+        setTags(tagsTratadas);
+      } else {
+        setTags(`${disciplina}, Prática, Estudo`);
+      }
+
     } catch (error) {
       setErroIA("A IA demorou a responder. Tente novamente.");
     } finally {
@@ -85,7 +128,20 @@ function App() {
       alert("Preencha todos os campos obrigatórios.");
       return;
     }
-    const novoPlano = { titulo, objetivo, ementa, data_prevista: dataPrevista, disciplina, conteudos, recursos, tags };
+    
+    // ENVIO SEPARADO: Enviando as três propriedades distintas para a sua API Flask salvar
+    const novoPlano = { 
+      titulo, 
+      objetivo, 
+      ementa, 
+      data_prevista: dataPrevista, 
+      disciplina, 
+      conteudos, 
+      topicos, // <-- Enviado aqui de forma limpa e separada
+      recursos, 
+      tags 
+    };
+    
     try {
       const response = await fetch(`${API_URL}/planos`, {
         method: 'POST',
@@ -113,7 +169,7 @@ function App() {
 
   const limparFormulario = () => {
     setTitulo(''); setObjetivo(''); setEmenta(''); setDataPrevista('');
-    setDisciplina(''); setConteudos(''); setRecursos(''); setTags(''); setErroIA('');
+    setDisciplina(''); setConteudos(''); setTopicos(''); setRecursos(''); setTags(''); setErroIA('');
   };
 
   const styles = {
@@ -141,7 +197,7 @@ function App() {
     <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh', padding: '40px 20px', fontFamily: '"Inter", system-ui, -apple-system, sans-serif', color: '#0f172a' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         
-        {/* Header Dashboard Premium - Badge do Gemini Removida */}
+        {/* Header Dashboard Premium */}
         <header style={{ marginBottom: '35px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '20px' }}>
           <div>
             <h1 style={{ fontSize: '30px', fontWeight: '800', letterSpacing: '-0.025em', margin: 0, color: '#0f172a' }}>
@@ -191,7 +247,7 @@ function App() {
                 <input type="date" style={styles.input} value={dataPrevista} onChange={e => setDataPrevista(e.target.value)} required />
               </div>
 
-              {/* Box da IA Destacada - Tópicos Relacionados Removido */}
+              {/* Box da IA Destacada - Sem poluição visual */}
               <div style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '20px' }}>
                 <span style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#4f46e5', display: 'block', marginBottom: '12px', letterSpacing: '0.05em' }}>✨ Retorno Automatizado LLM</span>
                 
@@ -247,7 +303,7 @@ function App() {
                       {plano.disciplina}
                     </span>
                     <h3 style={{ margin: '12px 0 6px 0', color: '#0f172a', fontSize: '16px', fontWeight: '700' }}>{plano.titulo}</h3>
-                    <p style={{ margin: '0 0 12px 0', fontSize: '13px', color: '#475569', lineHeight: '1.5' }}>{plano.ementa}</p>
+                    <p style={{ margin: '0 0 12px 0', fontSize: '13px', color: '#475569', lineHeight: '1.5' }}>{plano.conteudos}</p>
                     
                     {/* Renderização Limpa de Tags */}
                     {plano.tags && (
