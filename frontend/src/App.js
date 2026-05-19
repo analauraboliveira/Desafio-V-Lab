@@ -8,7 +8,7 @@ function App() {
   const [dataPrevista, setDataPrevista] = useState('');
   const [disciplina, setDisciplina] = useState('');
   const [conteudos, setConteudos] = useState('');
-  const [topicos, setTopicos] = useState(''); // <-- DADO SEPARADO: Guardado internamente
+  const [topicos, setTopicos] = useState(''); // <-- Estado para os Tópicos Relacionados
   const [recursos, setRecursos] = useState('');
   const [tags, setTags] = useState('');
 
@@ -66,11 +66,11 @@ function App() {
       if (!response.ok) throw new Error("Falha na API");
       const data = await response.json();
       
-      // 1. Se a API já manda separado, ótimo. Se mandar junto, o parser separa.
       let textoConteudos = data.conteudos || '';
       let listaTags = data.tags || '';
       let textoTopicos = data.topicos || data.topicos_relacionados || '';
 
+      // Parser caso o backend retorne tudo concatenado em uma string dentro de conteudos
       if (textoConteudos && !listaTags && !textoTopicos) {
         const linhas = textoConteudos.split('\n');
         let blocoConteudos = [];
@@ -101,11 +101,11 @@ function App() {
         }
       }
 
-      // 2. Alimenta os estados de forma 100% INDEPENDENTE
+      // Alimenta os 3 estados de forma totalmente independente
       setConteudos(textoConteudos);
-      setTopicos(textoTopicos); // Guardado isolado no estado, sem ir para a tela
+      setTopicos(textoTopicos);
       
-      // Tratamento estrito das 3 tags
+      // Formatação estrita das 3 tags
       if (Array.isArray(listaTags)) {
         setTags(listaTags.slice(0, 3).join(', '));
       } else if (typeof listaTags === 'string' && listaTags.trim().length > 0) {
@@ -129,7 +129,6 @@ function App() {
       return;
     }
     
-    // ENVIO SEPARADO: Enviando as três propriedades distintas para a sua API Flask salvar
     const novoPlano = { 
       titulo, 
       objetivo, 
@@ -137,7 +136,7 @@ function App() {
       data_prevista: dataPrevista, 
       disciplina, 
       conteudos, 
-      topicos, // <-- Enviado aqui de forma limpa e separada
+      topicos, 
       recursos, 
       tags 
     };
@@ -247,15 +246,23 @@ function App() {
                 <input type="date" style={styles.input} value={dataPrevista} onChange={e => setDataPrevista(e.target.value)} required />
               </div>
 
-              {/* Box da IA Destacada - Sem poluição visual */}
+              {/* Box da IA Destacada - Com os 3 Espaços Separados */}
               <div style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '20px' }}>
                 <span style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#4f46e5', display: 'block', marginBottom: '12px', letterSpacing: '0.05em' }}>✨ Retorno Automatizado LLM</span>
                 
+                {/* 1. Conteúdos Complementares */}
                 <div style={{ marginBottom: '12px' }}>
                   <label style={styles.label}>Conteúdos Sugeridos (AI)</label>
-                  <textarea style={{ ...styles.input, height: '75px', resize: 'none', backgroundColor: '#ffffff' }} value={conteudos} readOnly />
+                  <textarea style={{ ...styles.input, height: '65px', resize: 'none', backgroundColor: '#ffffff' }} value={conteudos} readOnly placeholder="Sugestão de conteúdo complementar focado em práticas..." />
                 </div>
 
+                {/* 2. Tópicos Relacionados */}
+                <div style={{ marginBottom: '12px' }}>
+                  <label style={styles.label}>Tópicos Relacionados (AI)</label>
+                  <textarea style={{ ...styles.input, height: '65px', resize: 'none', backgroundColor: '#ffffff' }} value={topicos} readOnly placeholder="Tópicos e conceitos ramificados pela IA..." />
+                </div>
+
+                {/* 3. Três Tags Recomendadas */}
                 <div>
                   <label style={styles.label}>Tags Geradas (AI)</label>
                   <input type="text" style={{ ...styles.input, backgroundColor: '#ffffff' }} value={tags} readOnly placeholder="3 Tags automáticas" />
@@ -278,7 +285,7 @@ function App() {
             <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1e293b', marginBottom: '6px' }}>Painel de Consulta</h2>
             <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '20px' }}>Monitore e filtre dinamicamente as aulas salvas na base SQLite.</p>
             
-            {/* Filtros Inteligentes */}
+            {/* Filtros */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
               <input type="text" placeholder="🔍 Buscar por título..." style={{ ...styles.input, marginTop: 0, padding: '10px' }} value={buscaTitulo} onChange={e => { setBuscaTitulo(e.target.value); setPaginaAtual(1); }} />
               <input type="text" placeholder="📁 Filtrar por disciplina..." style={{ ...styles.input, marginTop: 0, padding: '10px' }} value={filtroDisciplina} onChange={e => { setFiltroDisciplina(e.target.value); setPaginaAtual(1); }} />
@@ -303,9 +310,10 @@ function App() {
                       {plano.disciplina}
                     </span>
                     <h3 style={{ margin: '12px 0 6px 0', color: '#0f172a', fontSize: '16px', fontWeight: '700' }}>{plano.titulo}</h3>
-                    <p style={{ margin: '0 0 12px 0', fontSize: '13px', color: '#475569', lineHeight: '1.5' }}>{plano.conteudos}</p>
+                    <p style={{ margin: '0 0 6px 0', fontSize: '13px', color: '#475569', lineHeight: '1.5' }}><strong>Conteúdo:</strong> {plano.conteudos}</p>
+                    {plano.topicos && <p style={{ margin: '0 0 12px 0', fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}><strong>Tópicos:</strong> {plano.topicos}</p>}
                     
-                    {/* Renderização Limpa de Tags */}
+                    {/* Tags */}
                     {plano.tags && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                         {plano.tags.split(',').map((tag, idx) => {
