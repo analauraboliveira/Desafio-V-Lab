@@ -8,7 +8,6 @@ function App() {
   const [dataPrevista, setDataPrevista] = useState('');
   const [disciplina, setDisciplina] = useState('');
   const [conteudos, setConteudos] = useState('');
-  const [topicos, setTopicos] = useState(''); // <-- NOVO ESTADO PARA OS TÓPICOS
   const [recursos, setRecursos] = useState('');
   const [tags, setTags] = useState('');
 
@@ -66,12 +65,10 @@ function App() {
       if (!response.ok) throw new Error("Falha na API");
       const data = await response.json();
       
-      // Mapeia os retornos do backend para os estados do React
       setConteudos(data.conteudos || '');
-      setTopicos(data.topicos || data.topicos_relacionados || ''); // <-- CAPTURA OS TÓPICOS DA API
       
       if (data.tags && Array.isArray(data.tags)) {
-        setTags(data.tags.slice(0, 3).join(', ')); // Garante o limite de 3 tags sugeridas
+        setTags(data.tags.slice(0, 3).join(', '));
       } else if (data.tags) {
         setTags(data.tags);
       }
@@ -88,8 +85,6 @@ function App() {
       alert("Preencha todos os campos obrigatórios.");
       return;
     }
-    // Inclui a propriedade de tópicos ao salvar se o seu banco aceitar, 
-    // caso contrário ele apenas exibe na tela durante a geração.
     const novoPlano = { titulo, objetivo, ementa, data_prevista: dataPrevista, disciplina, conteudos, recursos, tags };
     try {
       const response = await fetch(`${API_URL}/planos`, {
@@ -118,7 +113,7 @@ function App() {
 
   const limparFormulario = () => {
     setTitulo(''); setObjetivo(''); setEmenta(''); setDataPrevista('');
-    setDisciplina(''); setConteudos(''); setTopicos(''); setRecursos(''); setTags(''); setErroIA('');
+    setDisciplina(''); setConteudos(''); setRecursos(''); setTags(''); setErroIA('');
   };
 
   const styles = {
@@ -146,17 +141,13 @@ function App() {
     <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh', padding: '40px 20px', fontFamily: '"Inter", system-ui, -apple-system, sans-serif', color: '#0f172a' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         
-        {/* Header Dashboard Premium */}
+        {/* Header Dashboard Premium - Badge do Gemini Removida */}
         <header style={{ marginBottom: '35px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '20px' }}>
           <div>
             <h1 style={{ fontSize: '30px', fontWeight: '800', letterSpacing: '-0.025em', margin: 0, color: '#0f172a' }}>
               Plano<span style={{ color: '#4f46e5' }}>Intellect</span> <span style={{ color: '#94a3b8', fontWeight: '300' }}>| V-Lab</span>
             </h1>
             <p style={{ color: '#64748b', fontSize: '14px', margin: '4px 0 0 0', fontWeight: '500' }}>Gerenciamento inteligente de planos pedagógicos com auxílio de LLM</p>
-          </div>
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', backgroundColor: '#e0e7ff', padding: '6px 14px', borderRadius: '20px', color: '#4f46e5', fontSize: '12px', fontWeight: '700' }}>
-            <span style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%', display: 'inline-block' }}></span>
-            Google Gemini Ativo
           </div>
         </header>
 
@@ -200,19 +191,13 @@ function App() {
                 <input type="date" style={styles.input} value={dataPrevista} onChange={e => setDataPrevista(e.target.value)} required />
               </div>
 
-              {/* Box da IA Destacada */}
+              {/* Box da IA Destacada - Tópicos Relacionados Removido */}
               <div style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '20px' }}>
                 <span style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#4f46e5', display: 'block', marginBottom: '12px', letterSpacing: '0.05em' }}>✨ Retorno Automatizado LLM</span>
                 
                 <div style={{ marginBottom: '12px' }}>
                   <label style={styles.label}>Conteúdos Sugeridos (AI)</label>
                   <textarea style={{ ...styles.input, height: '75px', resize: 'none', backgroundColor: '#ffffff' }} value={conteudos} readOnly />
-                </div>
-
-                {/* NOVO CAMPO VISUAL PARA OS TÓPICOS RELACIONADOS */}
-                <div style={{ marginBottom: '12px' }}>
-                  <label style={styles.label}>Tópicos Relacionados (AI)</label>
-                  <textarea style={{ ...styles.input, height: '75px', resize: 'none', backgroundColor: '#ffffff' }} value={topicos} readOnly placeholder="Tópicos paralelos sugeridos pela IA..." />
                 </div>
 
                 <div>
