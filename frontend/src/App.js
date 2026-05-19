@@ -8,6 +8,7 @@ function App() {
   const [dataPrevista, setDataPrevista] = useState('');
   const [disciplina, setDisciplina] = useState('');
   const [conteudos, setConteudos] = useState('');
+  const [topicos, setTopicos] = useState(''); // <-- NOVO ESTADO PARA OS TÓPICOS
   const [recursos, setRecursos] = useState('');
   const [tags, setTags] = useState('');
 
@@ -32,9 +33,7 @@ function App() {
 
   const carregarPlanos = async () => {
     try {
-      // TRATAMENTO DA TAG: Limpa o símbolo '#' e espaços extras para não quebrar a rota da API
       const tagTratada = filtroTag.replace('#', '').trim();
-
       const queryParams = new URLSearchParams({
         page: paginaAtual,
         titulo: buscaTitulo.trim(),
@@ -66,9 +65,15 @@ function App() {
       });
       if (!response.ok) throw new Error("Falha na API");
       const data = await response.json();
+      
+      // Mapeia os retornos do backend para os estados do React
       setConteudos(data.conteudos || '');
+      setTopicos(data.topicos || data.topicos_relacionados || ''); // <-- CAPTURA OS TÓPICOS DA API
+      
       if (data.tags && Array.isArray(data.tags)) {
-        setTags(data.tags.join(', '));
+        setTags(data.tags.slice(0, 3).join(', ')); // Garante o limite de 3 tags sugeridas
+      } else if (data.tags) {
+        setTags(data.tags);
       }
     } catch (error) {
       setErroIA("A IA demorou a responder. Tente novamente.");
@@ -83,6 +88,8 @@ function App() {
       alert("Preencha todos os campos obrigatórios.");
       return;
     }
+    // Inclui a propriedade de tópicos ao salvar se o seu banco aceitar, 
+    // caso contrário ele apenas exibe na tela durante a geração.
     const novoPlano = { titulo, objetivo, ementa, data_prevista: dataPrevista, disciplina, conteudos, recursos, tags };
     try {
       const response = await fetch(`${API_URL}/planos`, {
@@ -111,10 +118,9 @@ function App() {
 
   const limparFormulario = () => {
     setTitulo(''); setObjetivo(''); setEmenta(''); setDataPrevista('');
-    setDisciplina(''); setConteudos(''); setRecursos(''); setTags(''); setErroIA('');
+    setDisciplina(''); setConteudos(''); setTopicos(''); setRecursos(''); setTags(''); setErroIA('');
   };
 
-  // Objeto de estilos unificados (Design Premium SaaS)
   const styles = {
     input: {
       width: '100%',
@@ -203,9 +209,15 @@ function App() {
                   <textarea style={{ ...styles.input, height: '75px', resize: 'none', backgroundColor: '#ffffff' }} value={conteudos} readOnly />
                 </div>
 
+                {/* NOVO CAMPO VISUAL PARA OS TÓPICOS RELACIONADOS */}
+                <div style={{ marginBottom: '12px' }}>
+                  <label style={styles.label}>Tópicos Relacionados (AI)</label>
+                  <textarea style={{ ...styles.input, height: '75px', resize: 'none', backgroundColor: '#ffffff' }} value={topicos} readOnly placeholder="Tópicos paralelos sugeridos pela IA..." />
+                </div>
+
                 <div>
                   <label style={styles.label}>Tags Geradas (AI)</label>
-                  <input type="text" style={{ ...styles.input, backgroundColor: '#ffffff' }} value={tags} readOnly placeholder="Tags do sistema" />
+                  <input type="text" style={{ ...styles.input, backgroundColor: '#ffffff' }} value={tags} readOnly placeholder="3 Tags automáticas" />
                 </div>
               </div>
 
