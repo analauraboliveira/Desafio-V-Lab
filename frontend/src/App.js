@@ -111,191 +111,107 @@ function App() {
     setDisciplina(''); setConteudos(''); setRecursos(''); setTags(''); setErroIA('');
   };
 
-  // Objeto de estilos reutilizáveis para evitar bagunça
-  const styles = {
-    input: {
-      width: '100%',
-      padding: '12px 16px',
-      marginTop: '6px',
-      borderRadius: '10px',
-      border: '1px solid #e2e8f0',
-      boxSizing: 'border-box',
-      fontSize: '14px',
-      color: '#1e293b',
-      backgroundColor: '#ffffff',
-      transition: 'all 0.2s ease',
-      outline: 'none',
-      boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.02)'
-    },
-    label: {
-      fontSize: '13px',
-      fontWeight: '600',
-      color: '#475569',
-      letterSpacing: '0.3px'
-    }
-  };
-
   return (
-    <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh', padding: '40px 20px', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif', color: '#0f172a' }}>
-      <div style={{ maxWidth: '1320px', margin: '0 auto' }}>
+    <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh', padding: '40px 20px', fontFamily: '"Inter", system-ui, sans-serif' }}>
+      <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
         
-        {/* Header Minimalista e Sofisticado */}
-        <header style={{ marginBottom: '35px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '20px' }}>
-          <div>
-            <h1 style={{ fontSize: '32px', fontWeight: '800', letterSpacing: '-0.8px', margin: 0, color: '#0f172a' }}>
-              Plano<span style={{ color: '#4f46e5' }}>Intellect</span>
-            </h1>
-            <p style={{ color: '#64748b', fontSize: '14px', margin: '4px 0 0 0', fontWeight: '500' }}>Desafio Técnico V-Lab • Gestão Pedagógica com LLM</p>
-          </div>
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', backgroundColor: '#e0e7ff', padding: '6px 12px', borderRadius: '20px', color: '#4f46e5', fontSize: '12px', fontWeight: '700' }}>
-            <span style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%', display: 'inline-block' }}></span>
-            Gemini Pro Ativo
-          </div>
+        {/* Header Elegante */}
+        <header style={{ marginBottom: '32px', textAlign: 'center' }}>
+          <h1 style={{ color: '#0f172a', fontSize: '32px', fontWeight: '800', letterSpacing: '-0.025em', margin: '0 0 8px 0' }}>
+            PlanoIntellect <span style={{ color: '#4f46e5', fontWeight: '400' }}>| V-Lab</span>
+          </h1>
+          <p style={{ color: '#64748b', fontSize: '16px', margin: 0 }}>Gerenciamento inteligente de planos pedagógicos com auxílio de LLM</p>
         </header>
 
-        {/* Layout Principal */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: '35px', alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '32px', alignItems: 'start' }}>
           
-          {/* Coluna do Formulário (Esquerda) */}
-          <section style={{ 
-            backgroundColor: '#ffffff', 
-            padding: '30px', 
-            borderRadius: '20px', 
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 8px 10px -6px rgba(0, 0, 0, 0.03)'
-          }}>
-            <h2 style={{ fontSize: '22px', fontWeight: '700', color: '#0f172a', marginBottom: '6px', letterSpacing: '-0.3px' }}>Criar Novo Plano</h2>
-            <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '25px' }}>Preencha os dados e use a inteligência artificial para otimizar o conteúdo.</p>
+          {/* Formulário Modernizado */}
+          <section style={{ backgroundColor: '#ffffff', padding: '28px', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1e293b', marginBottom: '20px', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>Novo Plano de Aula</h2>
             
             <form onSubmit={salvarPlano}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                 <div>
-                  <label style={styles.label}>Título da Aula *</label>
-                  <input type="text" placeholder="Ex: Roteamento OSPF" style={styles.input} value={titulo} onChange={e => setTitulo(e.target.value)} required />
+                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Título da Aula *</label>
+                  <input type="text" style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }} value={titulo} onChange={e => setTitulo(e.target.value)} required />
                 </div>
                 <div>
-                  <label style={styles.label}>Disciplina *</label>
-                  <input type="text" placeholder="Ex: Redes de Computadores" style={styles.input} value={disciplina} onChange={e => setDisciplina(e.target.value)} required />
+                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Disciplina *</label>
+                  <input type="text" style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }} value={disciplina} onChange={e => setDisciplina(e.target.value)} required />
                 </div>
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={styles.label}>Ementa / Resumo Técnico *</label>
-                <textarea placeholder="Forneça uma breve descrição do foco da aula..." style={{ ...styles.input, height: '80px', resize: 'none' }} value={ementa} onChange={e => setEmenta(e.target.value)} required />
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Ementa / Resumo Técnico *</label>
+                <textarea style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', height: '64px', boxSizing: 'border-box', resize: 'none' }} value={ementa} onChange={e => setEmenta(e.target.value)} required />
               </div>
 
-              {/* Botão de IA - Premium / Destacado */}
-              <button type="button" onClick={lidarSmartAssist} disabled={loadingIA} style={{ 
-                background: loadingIA ? '#94a3b8' : 'linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)', 
-                color: '#ffffff', 
-                padding: '14px', 
-                border: 'none', 
-                borderRadius: '12px', 
-                cursor: 'pointer', 
-                fontWeight: '600', 
-                width: '100%', 
-                fontSize: '14px', 
-                marginBottom: '24px', 
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center', 
-                gap: '8px',
-                boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
-                transition: 'transform 0.2s'
-              }}>
-                ✨ {loadingIA ? "Consultando Assistente Pedagógico..." : "Gerar Sugestões & Tags com IA"}
+              {/* Botão Smart Assist Estilizado */}
+              <button type="button" onClick={lidarSmartAssist} disabled={loadingIA} style={{ backgroundColor: loadingIA ? '#94a3b8' : '#4f46e5', color: '#ffffff', padding: '12px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', width: '100%', transition: 'all 0.2s', marginBottom: '20px', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                {loadingIA ? "🪄 Processando Recomendações..." : "🪄 Gerar Insights com Google Gemini"}
               </button>
-              {erroIA && <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '-16px', marginBottom: '16px', fontWeight: '500' }}>⚠️ {erroIA}</p>}
+              {erroIA && <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '-12px', marginBottom: '12px' }}>{erroIA}</p>}
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={styles.label}>Objetivo Pedagógico *</label>
-                <textarea placeholder="O que os alunos devem reter ao fim desta aula?" style={{ ...styles.input, height: '80px', resize: 'none' }} value={objetivo} onChange={e => setObjetivo(e.target.value)} required />
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Objetivo Pedagógico *</label>
+                <textarea style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', height: '64px', boxSizing: 'border-box', resize: 'none' }} value={objetivo} onChange={e => setObjetivo(e.target.value)} required />
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={styles.label}>Data Prevista *</label>
-                <input type="date" style={styles.input} value={dataPrevista} onChange={e => setDataPrevista(e.target.value)} required />
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Data Prevista *</label>
+                <input type="date" style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }} value={dataPrevista} onChange={e => setDataPrevista(e.target.value)} required />
               </div>
 
-              {/* Seção Inteligente (Inputs Gerados pela IA possuem fundo sutilmente diferenciado) */}
-              <div style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1px solid #e2e8f0', marginBottom: '20px' }}>
-                <span style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#4f46e5', letterSpacing: '0.5px', display: 'block', marginBottom: '12px' }}>✨ Outputs Recomendados via LLM</span>
-                
-                <div style={{ marginBottom: '12px' }}>
-                  <label style={styles.label}>Conteúdos Complementares</label>
-                  <textarea placeholder="Serão gerados automaticamente pela IA..." style={{ ...styles.input, height: '80px', resize: 'none', backgroundColor: '#ffffff' }} value={conteudos} readOnly />
-                </div>
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Conteúdos Sugeridos (AI)</label>
+                <textarea style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc', height: '80px', boxSizing: 'border-box', color: '#334155' }} value={conteudos} onChange={e => setConteudos(e.target.value)} readOnly />
+              </div>
 
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
                 <div>
-                  <label style={styles.label}>Tags Automáticas</label>
-                  <input type="text" placeholder="Tags recomendadas pela IA" style={{ ...styles.input, backgroundColor: '#ffffff' }} value={tags} readOnly />
+                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Tags Geradas (AI)</label>
+                  <input type="text" style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc', boxSizing: 'border-box', color: '#334155' }} value={tags} onChange={e => setTags(e.target.value)} readOnly placeholder="Tags Automáticas" />
+                </div>
+                <div>
+                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Recursos de Apoio</label>
+                  <input type="text" style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }} value={recursos} onChange={e => setRecursos(e.target.value)} placeholder="Ex: Datashow, Slides" />
                 </div>
               </div>
 
-              <div style={{ marginBottom: '24px' }}>
-                <label style={styles.label}>Recursos de Apoio Extras</label>
-                <input type="text" placeholder="Ex: Laboratório de Práticas, Slides, Projetor" style={styles.input} value={recursos} onChange={e => setRecursos(e.target.value)} />
-              </div>
-
-              <button type="submit" style={{ backgroundColor: '#10b981', color: '#ffffff', padding: '14px', border: 'none', borderRadius: '12px', cursor: 'pointer', fontWeight: '700', fontSize: '15px', width: '100%', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)' }}>
-                Confirmar e Salvar no Banco
+              <button type="submit" style={{ backgroundColor: '#10b981', color: '#ffffff', padding: '14px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '15px', width: '100%' }}>
+                Concluir e Salvar Plano
               </button>
             </form>
           </section>
 
-          {/* Coluna do Painel de Consulta (Direita) */}
-          <section style={{ 
-            backgroundColor: '#ffffff', 
-            padding: '30px', 
-            borderRadius: '20px', 
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 8px 10px -6px rgba(0, 0, 0, 0.03)'
-          }}>
-            <h2 style={{ fontSize: '22px', fontWeight: '700', color: '#0f172a', marginBottom: '6px', letterSpacing: '-0.3px' }}>Painel de Monitoramento</h2>
-            <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '25px' }}>Filtre, ordene e gerencie todos os planos pedagógicos salvos no SQLite.</p>
+          {/* Listagem Modernizada */}
+          <section style={{ backgroundColor: '#ffffff', padding: '28px', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1e293b', marginBottom: '20px', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>Painel de Consulta</h2>
             
-            {/* Bloco de Filtros Clean */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '25px', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '14px', border: '1px solid #e2e8f0' }}>
-              <input type="text" placeholder="🔍 Buscar por título..." style={{ ...styles.input, marginTop: 0, padding: '10px 14px' }} value={buscaTitulo} onChange={e => { setBuscaTitulo(e.target.value); setPaginaAtual(1); }} />
-              <input type="text" placeholder="📁 Filtrar por disciplina..." style={{ ...styles.input, marginTop: 0, padding: '10px 14px' }} value={filtroDisciplina} onChange={e => { setFiltroDisciplina(e.target.value); setPaginaAtual(1); }} />
-              <input type="text" placeholder="🏷️ Filtrar por tag..." style={{ ...styles.input, marginTop: 0, padding: '10px 14px' }} value={filtroTag} onChange={e => { setFiltroTag(e.target.value); setPaginaAtual(1); }} />
-              <select style={{ ...styles.input, marginTop: 0, padding: '10px 14px', backgroundColor: '#fff', cursor: 'pointer' }} value={ordenarPor} onChange={e => setOrdenarPor(e.target.value)}>
-                <option value="data_cadastro">📆 Ordenar: Cadastro</option>
-                <option value="titulo">🔤 Ordenar: Alfabética</option>
+            {/* Filtros */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
+              <input type="text" placeholder="🔍 Buscar por título..." style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px' }} value={buscaTitulo} onChange={e => { setBuscaTitulo(e.target.value); setPaginaAtual(1); }} />
+              <input type="text" placeholder="📁 Filtrar por disciplina..." style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px' }} value={filtroDisciplina} onChange={e => { setFiltroDisciplina(e.target.value); setPaginaAtual(1); }} />
+              <input type="text" placeholder="🏷️ Filtrar por tag..." style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px' }} value={filtroTag} onChange={e => { setFiltroTag(e.target.value); setPaginaAtual(1); }} />
+              <select style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', backgroundColor: '#fff' }} value={ordenarPor} onChange={e => setOrdenarPor(e.target.value)}>
+                <option value="data_cadastro">Data de Cadastro</option>
+                <option value="titulo">Ordem Alfabética</option>
               </select>
             </div>
 
-            {/* Listagem em Grid de Duas Colunas Impecável */}
-            <div style={{ display: 'grid', gridTemplateColumns: planos.length > 1 ? '1fr 1fr' : '1fr', gap: '16px' }}>
+            {/* Listagem Cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {planos.length === 0 ? (
-                <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '50px 0', color: '#94a3b8' }}>
-                  <p style={{ fontSize: '16px', fontWeight: '500', margin: 0 }}>Nenhum registro encontrado</p>
-                  <p style={{ fontSize: '13px', margin: '4px 0 0 0' }}>Cadastre novas aulas ou altere os filtros acima.</p>
-                </div>
+                <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '14px', padding: '40px 0' }}>Nenhum plano pedagógico registrado.</p>
               ) : (
                 planos.map(plano => (
-                  <div key={plano.id} style={{ 
-                    border: '1px solid #e2e8f0', 
-                    borderRadius: '14px', 
-                    padding: '18px', 
-                    backgroundColor: '#ffffff', 
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.02)', 
-                    display: 'flex', 
-                    flexDirection: 'column',
-                    position: 'relative',
-                    transition: 'all 0.2s'
-                  }}>
-                    <div style={{ marginBottom: '14px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: '700', color: '#4f46e5', backgroundColor: '#e0e7ff', padding: '4px 8px', borderRadius: '6px', textTransform: 'uppercase', letterSpacing: '0.3px' }}>
-                        {plano.disciplina}
-                      </span>
-                      <h3 style={{ margin: '12px 0 6px 0', color: '#0f172a', fontSize: '16px', fontWeight: '700', letterSpacing: '-0.3px' }}>{plano.titulo}</h3>
-                      <p style={{ margin: 0, fontSize: '13px', color: '#475569', lineHeight: '1.5' }}>{plano.ementa}</p>
-                    </div>
-
-                    {/* Exibição Elegante das Tags */}
+                  <div key={plano.id} style={{ border: '1px solid #f1f5f9', borderRadius: '12px', padding: '18px', position: 'relative', backgroundColor: '#fff', boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.01)' }}>
+                    <span style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#4f46e5', backgroundColor: '#f5f3ff', padding: '4px 8px', borderRadius: '6px' }}>{plano.disciplina}</span>
+                    <h3 style={{ margin: '10px 0 6px 0', color: '#0f172a', fontSize: '16px', fontWeight: '700' }}>{plano.titulo}</h3>
+                    <p style={{ margin: '0 0 12px 0', fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>{plano.ementa}</p>
+                    
                     {plano.tags && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: 'auto', paddingTop: '10px' }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '4px' }}>
                         {plano.tags.split(',').map((tag, idx) => (
                           <span key={idx} style={{ backgroundColor: '#f1f5f9', color: '#334155', padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: '600' }}>
                             #{tag.trim()}
@@ -304,21 +220,20 @@ function App() {
                       </div>
                     )}
 
-                    {/* Botão de Excluir Minimalista no canto */}
-                    <button onClick={() => excluirPlano(plano.id)} style={{ position: 'absolute', top: '16px', right: '16px', backgroundColor: 'transparent', color: '#94a3b8', border: 'none', cursor: 'pointer', fontSize: '12px', transition: 'color 0.2s' }} onMouseEnter={(e) => e.target.style.color = '#ef4444'} onMouseLeave={(e) => e.target.style.color = '#94a3b8'}>
-                      ✕
+                    <button onClick={() => excluirPlano(plano.id)} style={{ backgroundColor: '#fff', color: '#ef4444', padding: '6px 12px', border: '1px solid #fee2e2', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '600', position: 'absolute', right: '18px', top: '18px' }}>
+                      Remover
                     </button>
                   </div>
                 ))
               )}
             </div>
 
-            {/* Paginação Estilizada */}
+            {/* Paginação */}
             {totalPaginas > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'between', alignItems: 'center', marginTop: '25px', borderTop: '1px solid #e2e8f0', paddingTop: '20px' }}>
-                <button disabled={paginaAtual === 1} onClick={() => setPaginaAtual(p => p - 1)} style={{ padding: '8px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', cursor: 'pointer', backgroundColor: '#fff', fontSize: '13px', fontWeight: '500', color: paginaAtual === 1 ? '#94a3b8' : '#1e293b' }}>← Anterior</button>
-                <span style={{ fontSize: '13px', color: '#64748b', fontWeight: '600' }}>Página {paginaAtual} de {totalPaginas}</span>
-                <button disabled={paginaAtual === totalPaginas} onClick={() => setPaginaAtual(p => p + 1)} style={{ padding: '8px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', cursor: 'pointer', backgroundColor: '#fff', fontSize: '13px', fontWeight: '500', color: paginaAtual === totalPaginas ? '#94a3b8' : '#1e293b' }}>Próxima →</button>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '24px', borderTop: '1px solid #f1f5f9', paddingTop: '16px' }}>
+                <button disabled={paginaAtual === 1} onClick={() => setPaginaAtual(p => p - 1)} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', cursor: 'pointer', backgroundColor: '#fff', fontSize: '13px' }}>Anterior</button>
+                <span style={{ fontSize: '13px', color: '#475569', fontWeight: '500' }}>{paginaAtual} de {totalPaginas}</span>
+                <button disabled={paginaAtual === totalPaginas} onClick={() => setPaginaAtual(p => p + 1)} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', cursor: 'pointer', backgroundColor: '#fff', fontSize: '13px' }}>Próxima</button>
               </div>
             )}
           </section>
