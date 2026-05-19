@@ -1,0 +1,17 @@
+# ambientes virtuais e cache do python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# dependências do javascript/react
+node_modules/
+build/
+dist/
+
+# banco de dados local
+backend/planos.db
+
+# sistema operacional
+.DS_Store
+Thumbs.db
