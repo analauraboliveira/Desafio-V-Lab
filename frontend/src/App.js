@@ -32,11 +32,14 @@ function App() {
 
   const carregarPlanos = async () => {
     try {
+      // TRATAMENTO DA TAG: Limpa o símbolo '#' e espaços extras para não quebrar a rota da API
+      const tagTratada = filtroTag.replace('#', '').trim();
+
       const queryParams = new URLSearchParams({
         page: paginaAtual,
-        titulo: buscaTitulo,
-        disciplina: filtroDisciplina,
-        tag: filtroTag,
+        titulo: buscaTitulo.trim(),
+        disciplina: filtroDisciplina.trim(),
+        tag: tagTratada,
         ordenar: ordenarPor
       });
       const response = await fetch(`${API_URL}/planos?${queryParams}`);
@@ -111,116 +114,159 @@ function App() {
     setDisciplina(''); setConteudos(''); setRecursos(''); setTags(''); setErroIA('');
   };
 
+  // Objeto de estilos unificados (Design Premium SaaS)
+  const styles = {
+    input: {
+      width: '100%',
+      padding: '12px 14px',
+      marginTop: '6px',
+      borderRadius: '10px',
+      border: '1px solid #cbd5e1',
+      boxSizing: 'border-box',
+      fontSize: '14px',
+      color: '#0f172a',
+      backgroundColor: '#ffffff',
+      outline: 'none',
+      transition: 'all 0.2s ease',
+    },
+    label: {
+      fontSize: '13px',
+      fontWeight: '600',
+      color: '#475569'
+    }
+  };
+
   return (
-    <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh', padding: '40px 20px', fontFamily: '"Inter", system-ui, sans-serif' }}>
-      <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
+    <div style={{ backgroundColor: '#f8fafc', minHeight: '100vh', padding: '40px 20px', fontFamily: '"Inter", system-ui, -apple-system, sans-serif', color: '#0f172a' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
         
-        {/* Header Elegante */}
-        <header style={{ marginBottom: '32px', textAlign: 'center' }}>
-          <h1 style={{ color: '#0f172a', fontSize: '32px', fontWeight: '800', letterSpacing: '-0.025em', margin: '0 0 8px 0' }}>
-            PlanoIntellect <span style={{ color: '#4f46e5', fontWeight: '400' }}>| V-Lab</span>
-          </h1>
-          <p style={{ color: '#64748b', fontSize: '16px', margin: 0 }}>Gerenciamento inteligente de planos pedagógicos com auxílio de LLM</p>
+        {/* Header Dashboard Premium */}
+        <header style={{ marginBottom: '35px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '20px' }}>
+          <div>
+            <h1 style={{ fontSize: '30px', fontWeight: '800', letterSpacing: '-0.025em', margin: 0, color: '#0f172a' }}>
+              Plano<span style={{ color: '#4f46e5' }}>Intellect</span> <span style={{ color: '#94a3b8', fontWeight: '300' }}>| V-Lab</span>
+            </h1>
+            <p style={{ color: '#64748b', fontSize: '14px', margin: '4px 0 0 0', fontWeight: '500' }}>Gerenciamento inteligente de planos pedagógicos com auxílio de LLM</p>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', backgroundColor: '#e0e7ff', padding: '6px 14px', borderRadius: '20px', color: '#4f46e5', fontSize: '12px', fontWeight: '700' }}>
+            <span style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%', display: 'inline-block' }}></span>
+            Google Gemini Ativo
+          </div>
         </header>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '32px', alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: '35px', alignItems: 'start' }}>
           
-          {/* Formulário Modernizado */}
-          <section style={{ backgroundColor: '#ffffff', padding: '28px', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)' }}>
-            <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1e293b', marginBottom: '20px', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>Novo Plano de Aula</h2>
+          {/* Painel de Cadastro (Esquerda) */}
+          <section style={{ backgroundColor: '#ffffff', padding: '30px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1e293b', marginBottom: '6px' }}>Novo Plano de Aula</h2>
+            <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '20px' }}>Preencha os campos abaixo e utilize a IA para enriquecer o conteúdo.</p>
             
             <form onSubmit={salvarPlano}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Título da Aula *</label>
-                  <input type="text" style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }} value={titulo} onChange={e => setTitulo(e.target.value)} required />
+                  <label style={styles.label}>Título da Aula *</label>
+                  <input type="text" style={styles.input} value={titulo} onChange={e => setTitulo(e.target.value)} required />
                 </div>
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Disciplina *</label>
-                  <input type="text" style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }} value={disciplina} onChange={e => setDisciplina(e.target.value)} required />
+                  <label style={styles.label}>Disciplina *</label>
+                  <input type="text" style={styles.input} value={disciplina} onChange={e => setDisciplina(e.target.value)} required />
                 </div>
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Ementa / Resumo Técnico *</label>
-                <textarea style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', height: '64px', boxSizing: 'border-box', resize: 'none' }} value={ementa} onChange={e => setEmenta(e.target.value)} required />
+                <label style={styles.label}>Ementa / Resumo Técnico *</label>
+                <textarea style={{ ...styles.input, height: '70px', resize: 'none' }} value={ementa} onChange={e => setEmenta(e.target.value)} required />
               </div>
 
-              {/* Botão Smart Assist Estilizado */}
-              <button type="button" onClick={lidarSmartAssist} disabled={loadingIA} style={{ backgroundColor: loadingIA ? '#94a3b8' : '#4f46e5', color: '#ffffff', padding: '12px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', width: '100%', transition: 'all 0.2s', marginBottom: '20px', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+              {/* Botão Assistente */}
+              <button type="button" onClick={lidarSmartAssist} disabled={loadingIA} style={{ backgroundColor: loadingIA ? '#94a3b8' : '#4f46e5', color: '#ffffff', padding: '13px', border: 'none', borderRadius: '10px', cursor: 'pointer', fontWeight: '600', width: '100%', fontSize: '14px', marginBottom: '20px', display: 'flex', justifyContent: 'center', gap: '8px', boxShadow: '0 4px 10px rgba(79, 70, 229, 0.15)', transition: 'all 0.2s' }}>
                 {loadingIA ? "🪄 Processando Recomendações..." : "🪄 Gerar Insights com Google Gemini"}
               </button>
-              {erroIA && <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '-12px', marginBottom: '12px' }}>{erroIA}</p>}
+              {erroIA && <p style={{ color: '#ef4444', fontSize: '13px', marginTop: '-12px', marginBottom: '12px' }}>⚠️ {erroIA}</p>}
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Objetivo Pedagógico *</label>
-                <textarea style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', height: '64px', boxSizing: 'border-box', resize: 'none' }} value={objetivo} onChange={e => setObjetivo(e.target.value)} required />
+                <label style={styles.label}>Objetivo Pedagógico *</label>
+                <textarea style={{ ...styles.input, height: '70px', resize: 'none' }} value={objetivo} onChange={e => setObjetivo(e.target.value)} required />
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Data Prevista *</label>
-                <input type="date" style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }} value={dataPrevista} onChange={e => setDataPrevista(e.target.value)} required />
+                <label style={styles.label}>Data Prevista *</label>
+                <input type="date" style={styles.input} value={dataPrevista} onChange={e => setDataPrevista(e.target.value)} required />
               </div>
 
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Conteúdos Sugeridos (AI)</label>
-                <textarea style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc', height: '80px', boxSizing: 'border-box', color: '#334155' }} value={conteudos} onChange={e => setConteudos(e.target.value)} readOnly />
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
-                <div>
-                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Tags Geradas (AI)</label>
-                  <input type="text" style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc', boxSizing: 'border-box', color: '#334155' }} value={tags} onChange={e => setTags(e.target.value)} readOnly placeholder="Tags Automáticas" />
+              {/* Box da IA Destacada */}
+              <div style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '20px' }}>
+                <span style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#4f46e5', display: 'block', marginBottom: '12px', letterSpacing: '0.05em' }}>✨ Retorno Automatizado LLM</span>
+                
+                <div style={{ marginBottom: '12px' }}>
+                  <label style={styles.label}>Conteúdos Sugeridos (AI)</label>
+                  <textarea style={{ ...styles.input, height: '75px', resize: 'none', backgroundColor: '#ffffff' }} value={conteudos} readOnly />
                 </div>
+
                 <div>
-                  <label style={{ fontSize: '13px', fontWeight: '600', color: '#475569' }}>Recursos de Apoio</label>
-                  <input type="text" style={{ width: '100%', padding: '10px', marginTop: '6px', borderRadius: '8px', border: '1px solid #cbd5e1', boxSizing: 'border-box' }} value={recursos} onChange={e => setRecursos(e.target.value)} placeholder="Ex: Datashow, Slides" />
+                  <label style={styles.label}>Tags Geradas (AI)</label>
+                  <input type="text" style={{ ...styles.input, backgroundColor: '#ffffff' }} value={tags} readOnly placeholder="Tags do sistema" />
                 </div>
               </div>
 
-              <button type="submit" style={{ backgroundColor: '#10b981', color: '#ffffff', padding: '14px', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '15px', width: '100%' }}>
+              <div style={{ marginBottom: '24px' }}>
+                <label style={styles.label}>Recursos de Apoio</label>
+                <input type="text" style={styles.input} value={recursos} onChange={e => setRecursos(e.target.value)} placeholder="Ex: Datashow, Slides" />
+              </div>
+
+              <button type="submit" style={{ backgroundColor: '#10b981', color: '#ffffff', padding: '14px', border: 'none', borderRadius: '10px', cursor: 'pointer', fontWeight: '700', fontSize: '15px', width: '100%', boxShadow: '0 4px 10px rgba(16, 185, 129, 0.15)' }}>
                 Concluir e Salvar Plano
               </button>
             </form>
           </section>
 
-          {/* Listagem Modernizada */}
-          <section style={{ backgroundColor: '#ffffff', padding: '28px', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)' }}>
-            <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1e293b', marginBottom: '20px', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>Painel de Consulta</h2>
+          {/* Painel de Consulta (Direita) */}
+          <section style={{ backgroundColor: '#ffffff', padding: '30px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1e293b', marginBottom: '6px' }}>Painel de Consulta</h2>
+            <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '20px' }}>Monitore e filtre dinamicamente as aulas salvas na base SQLite.</p>
             
-            {/* Filtros */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
-              <input type="text" placeholder="🔍 Buscar por título..." style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px' }} value={buscaTitulo} onChange={e => { setBuscaTitulo(e.target.value); setPaginaAtual(1); }} />
-              <input type="text" placeholder="📁 Filtrar por disciplina..." style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px' }} value={filtroDisciplina} onChange={e => { setFiltroDisciplina(e.target.value); setPaginaAtual(1); }} />
-              <input type="text" placeholder="🏷️ Filtrar por tag..." style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px' }} value={filtroTag} onChange={e => { setFiltroTag(e.target.value); setPaginaAtual(1); }} />
-              <select style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '13px', backgroundColor: '#fff' }} value={ordenarPor} onChange={e => setOrdenarPor(e.target.value)}>
-                <option value="data_cadastro">Data de Cadastro</option>
-                <option value="titulo">Ordem Alfabética</option>
+            {/* Filtros Inteligentes */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px', padding: '16px', backgroundColor: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+              <input type="text" placeholder="🔍 Buscar por título..." style={{ ...styles.input, marginTop: 0, padding: '10px' }} value={buscaTitulo} onChange={e => { setBuscaTitulo(e.target.value); setPaginaAtual(1); }} />
+              <input type="text" placeholder="📁 Filtrar por disciplina..." style={{ ...styles.input, marginTop: 0, padding: '10px' }} value={filtroDisciplina} onChange={e => { setFiltroDisciplina(e.target.value); setPaginaAtual(1); }} />
+              <input type="text" placeholder="🏷️ Filtrar por tag..." style={{ ...styles.input, marginTop: 0, padding: '10px' }} value={filtroTag} onChange={e => { setFiltroTag(e.target.value); setPaginaAtual(1); }} />
+              <select style={{ ...styles.input, marginTop: 0, padding: '10px', backgroundColor: '#fff', cursor: 'pointer' }} value={ordenarPor} onChange={e => setOrdenarPor(e.target.value)}>
+                <option value="data_cadastro">📆 Data de Cadastro</option>
+                <option value="titulo">🔤 Ordem Alfabética</option>
               </select>
             </div>
 
-            {/* Listagem Cards */}
+            {/* Listagem de Cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {planos.length === 0 ? (
-                <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '14px', padding: '40px 0' }}>Nenhum plano pedagógico registrado.</p>
+                <div style={{ textAlign: 'center', padding: '40px 0', color: '#94a3b8' }}>
+                  <p style={{ fontSize: '15px', fontWeight: '500', margin: 0 }}>Nenhum plano pedagógico registrado.</p>
+                  <p style={{ fontSize: '13px', margin: '4px 0 0 0' }}>Altere os filtros ou adicione uma nova aula à esquerda.</p>
+                </div>
               ) : (
                 planos.map(plano => (
-                  <div key={plano.id} style={{ border: '1px solid #f1f5f9', borderRadius: '12px', padding: '18px', position: 'relative', backgroundColor: '#fff', boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.01)' }}>
-                    <span style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#4f46e5', backgroundColor: '#f5f3ff', padding: '4px 8px', borderRadius: '6px' }}>{plano.disciplina}</span>
-                    <h3 style={{ margin: '10px 0 6px 0', color: '#0f172a', fontSize: '16px', fontWeight: '700' }}>{plano.titulo}</h3>
-                    <p style={{ margin: '0 0 12px 0', fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>{plano.ementa}</p>
+                  <div key={plano.id} style={{ border: '1px solid #e2e8f0', borderRadius: '12px', padding: '18px', position: 'relative', backgroundColor: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.01)' }}>
+                    <span style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#4f46e5', backgroundColor: '#e0e7ff', padding: '4px 8px', borderRadius: '6px' }}>
+                      {plano.disciplina}
+                    </span>
+                    <h3 style={{ margin: '12px 0 6px 0', color: '#0f172a', fontSize: '16px', fontWeight: '700' }}>{plano.titulo}</h3>
+                    <p style={{ margin: '0 0 12px 0', fontSize: '13px', color: '#475569', lineHeight: '1.5' }}>{plano.ementa}</p>
                     
+                    {/* Renderização Limpa de Tags */}
                     {plano.tags && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '4px' }}>
-                        {plano.tags.split(',').map((tag, idx) => (
-                          <span key={idx} style={{ backgroundColor: '#f1f5f9', color: '#334155', padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: '600' }}>
-                            #{tag.trim()}
-                          </span>
-                        ))}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                        {plano.tags.split(',').map((tag, idx) => {
+                          const tagLimpa = tag.trim().replace('#', '');
+                          return tagLimpa ? (
+                            <span key={idx} style={{ backgroundColor: '#f1f5f9', color: '#334155', padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: '600' }}>
+                              #{tagLimpa}
+                            </span>
+                          ) : null;
+                        })}
                       </div>
                     )}
 
-                    <button onClick={() => excluirPlano(plano.id)} style={{ backgroundColor: '#fff', color: '#ef4444', padding: '6px 12px', border: '1px solid #fee2e2', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '600', position: 'absolute', right: '18px', top: '18px' }}>
+                    <button onClick={() => excluirPlano(plano.id)} style={{ backgroundColor: '#fff', color: '#ef4444', padding: '6px 12px', border: '1px solid #fee2e2', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '600', position: 'absolute', right: '18px', top: '18px', transition: 'all 0.2s' }} onMouseEnter={(e) => { e.target.style.backgroundColor = '#ef4444'; e.target.style.color = '#fff'; }} onMouseLeave={(e) => { e.target.style.backgroundColor = '#fff'; e.target.style.color = '#ef4444'; }}>
                       Remover
                     </button>
                   </div>
@@ -230,10 +276,10 @@ function App() {
 
             {/* Paginação */}
             {totalPaginas > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '24px', borderTop: '1px solid #f1f5f9', paddingTop: '16px' }}>
-                <button disabled={paginaAtual === 1} onClick={() => setPaginaAtual(p => p - 1)} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', cursor: 'pointer', backgroundColor: '#fff', fontSize: '13px' }}>Anterior</button>
-                <span style={{ fontSize: '13px', color: '#475569', fontWeight: '500' }}>{paginaAtual} de {totalPaginas}</span>
-                <button disabled={paginaAtual === totalPaginas} onClick={() => setPaginaAtual(p => p + 1)} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', cursor: 'pointer', backgroundColor: '#fff', fontSize: '13px' }}>Próxima</button>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '24px', borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
+                <button disabled={paginaAtual === 1} onClick={() => setPaginaAtual(p => p - 1)} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', cursor: 'pointer', backgroundColor: '#fff', fontSize: '13px', fontWeight: '500' }}>← Anterior</button>
+                <span style={{ fontSize: '13px', color: '#475569', fontWeight: '600' }}>{paginaAtual} de {totalPaginas}</span>
+                <button disabled={paginaAtual === totalPaginas} onClick={() => setPaginaAtual(p => p + 1)} style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', cursor: 'pointer', backgroundColor: '#fff', fontSize: '13px', fontWeight: '500' }}>Próxima →</button>
               </div>
             )}
           </section>
