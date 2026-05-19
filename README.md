@@ -29,5 +29,5 @@ Esta é uma aplicação completa (Single Page Application em React e API RESTful
     docker-compose up --build
 
 4. Acesse o sistema através do seu navegador:
-Frontend (Interface React): http://localhost:3000
-Backend (API Flask / Health Check): http://localhost:5000/health
+- Frontend (Interface React): http://localhost:3000
+- Backend (API Flask / Health Check): http://localhost:5000/health
